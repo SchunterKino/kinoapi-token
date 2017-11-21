@@ -4,7 +4,7 @@ require __DIR__ . '/../config/config.php';
 
 use \Firebase\JWT\JWT;
 
-$token_base = ['iss' => 'http://schunterkino.de',
+$token_base = ['iss' => TOKEN_ISSUER,
 		'iat' => time(),
 		'nbf' => time(),
 		// Expire in x hours.

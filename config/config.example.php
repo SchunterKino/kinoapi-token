@@ -27,6 +27,11 @@ define('TOKEN_EXPIRE', 60*60*4);
 define('TOKEN_SUBJECT', 'SchunterKinoRemote');
 
 /**
+ * The issuer of the token.
+ */
+define('TOKEN_ISSUER', 'http://schunterkino.de');
+
+/**
  * The algorithm used to sign the JWT.
  * https://tools.ietf.org/html/rfc7518
  */
