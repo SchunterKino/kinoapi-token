@@ -9,9 +9,12 @@
 define('TOKEN_KEY', '');
 
 /**
- * Password the user has to enter to get a valid token.
+ * Hash of the password the user has to enter to get a valid token.
+ *
+ * Generate using (since PHP 5.5.0)
+ *   echo password_hash('secret', PASSWORD_DEFAULT);
  */
-define('PASSWORD', '');
+define('PASSWORD_HASH', '');
 
 /**
  * How long (in seconds) should the generated token be valid?

@@ -32,8 +32,7 @@ if (!isset($_POST) || !isset($_POST['password']) || is_array($_POST['password'])
 // TODO: Limit login attempts to X per minute and ban the IP if typed wrong too often.
 
 // Authenticate the user.
-// TODO: Only store hashed password in config.
-if ($_POST['password'] !== PASSWORD) {
+if (!password_verify($_POST['password'], PASSWORD_HASH)) {
 	http_response_code(401);
 	die();
 }
