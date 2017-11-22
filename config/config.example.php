@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Shared secret between this token generator and the
+ * Base64 encoded shared secret between this token generator and the
  * websocket server authenticating the user.
  *
  * Used to sign the JSON Web Token.
