@@ -12,7 +12,7 @@ define('TOKEN_KEY', '');
  * Hash of the password the user has to enter to get a valid token.
  *
  * Generate using (since PHP 5.5.0)
- *   echo password_hash('secret', PASSWORD_DEFAULT);
+ *   php -r 'echo password_hash("secret", PASSWORD_DEFAULT);'
  */
 define('PASSWORD_HASH', '');
 

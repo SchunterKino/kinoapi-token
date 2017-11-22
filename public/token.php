@@ -12,7 +12,7 @@ $token_base = ['iss' => TOKEN_ISSUER,
 		'sub' => TOKEN_SUBJECT];
 
 // Make sure we're configured.
-if (empty(TOKEN_KEY) || empty(PASSWORD)) {
+if (empty(TOKEN_KEY) || empty(PASSWORD_HASH)) {
 	http_response_code(400);
 	die();
 }
