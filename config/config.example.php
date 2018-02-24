@@ -41,3 +41,12 @@ define('SIGNING_ALGORITHM', 'HS512');
  * Only send the token cookie with connections to this domain.
  */
 define('COOKIE_DOMAIN', 'remote.schunterkino.de');
+
+/**
+ * The amount of bad password attempts before the IP is banned for X minutes.
+ * The number of times the IP was banned in the last 24 hours is saved.
+ * The time in minutes the IP is banned after X bad attempts is then
+ * determined by X = 2^(number of bans), resulting in increased time on
+ * repeated failed attempts.
+ */
+define('MAX_PASSWORD_TRIES', 5);

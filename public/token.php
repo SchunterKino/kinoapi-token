@@ -30,12 +30,40 @@ if (!isset($_POST) || !isset($_POST['password']) || is_array($_POST['password'])
 	die();
 }
 
-// TODO: Limit login attempts to X per minute and ban the IP if typed wrong too often.
+// Limit login attempts to X per minute and ban the IP if typed wrong too often.
+// https://coderwall.com/p/sauviq/brute-force-protection-in-php
+$apc_key = "login:{$_SERVER['REMOTE_ADDR']}";
+$apc_blocked_key = "login-blocked:{$_SERVER['REMOTE_ADDR']}";
+$tries = (int)apcu_fetch($apc_key);
+
+if ($tries >= MAX_PASSWORD_TRIES) {
+	http_response_code(429); // Too Many Requests
+	echo "You've exceeded the number of login attempts. We've blocked IP address {$_SERVER['REMOTE_ADDR']} for a few minutes.";
+	die();
+}
 
 // Authenticate the user.
 if (!password_verify($_POST['password'], PASSWORD_HASH)) {
+	
+	// See how often this IP was blocked in the last 24 hours.
+	$blocked = (int)apcu_fetch($apc_blocked_key);
+	
+	// Store tries for 2^(x+1) minutes: 2, 4, 8, 16, ...
+	// Store the number of failed attempts longer exponentially (and block the IP longer)
+	// if the IP was blocked before.
+	$block_time = pow(2, $blocked + 1) * 60;
+	apcu_store($apc_key, $tries + 1, $block_time);
+	
+	// Remember the number of times this IP was banned for 24 hours.
+	if ($tries + 1 >= MAX_PASSWORD_TRIES)
+		apcu_store($apc_blocked_key, $blocked + 1, 60*60*24);
+	
 	http_response_code(401);
 	die();
+} else {
+	// A successful login resets the IP ban counter.
+	apcu_delete($apc_key);
+	apcu_delete($apc_blocked_key);
 }
 
 // Generate a signed token.

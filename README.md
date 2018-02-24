@@ -5,6 +5,7 @@ This service validates a password sent over a HTTPS connection and generates a s
 
 ## Installation
 This project uses PHP [Composer](https://getcomposer.org/download/) for dependency management.
+Requires the [APCu PHP extension](http://php.net/manual/en/book.apcu.php).
 
 To get the dependencies, run
 ```
