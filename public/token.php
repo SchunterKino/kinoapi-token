@@ -15,19 +15,19 @@ $token_base = ['iss' => TOKEN_ISSUER,
 $key = base64_decode(TOKEN_KEY, true);
 if (empty(TOKEN_KEY) || $key === false || empty(PASSWORD_HASH)) {
 	http_response_code(400);
-	die();
+	exit('Script not fully setup.');
 }
 
 // We only respond to secure requests.
 if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') {
 	http_response_code(400);
-	die();
+	exit('HTTPS is required.');
 }
 
 // Make sure we have the info we need.
 if (!isset($_POST) || !isset($_POST['password']) || is_array($_POST['password'])) {
 	http_response_code(400);
-	die();
+	exit('Invalid request.');
 }
 
 // Limit login attempts to X per minute and ban the IP if typed wrong too often.
@@ -38,8 +38,7 @@ $tries = (int)apcu_fetch($apc_key);
 
 if ($tries >= MAX_PASSWORD_TRIES) {
 	http_response_code(429); // Too Many Requests
-	echo "You've exceeded the number of login attempts. We've blocked IP address {$_SERVER['REMOTE_ADDR']} for a few minutes.";
-	die();
+	exit("You've exceeded the number of login attempts. We've blocked IP address {$_SERVER['REMOTE_ADDR']} for a few minutes.");
 }
 
 // Authenticate the user.
