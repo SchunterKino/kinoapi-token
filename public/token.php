@@ -70,7 +70,13 @@ $jwt = JWT::encode($token_base, $key, SIGNING_ALGORITHM);
 
 // Set it as a cookie on the client.
 // Forget the token when the client closes the browser.
-setcookie('token', $jwt, 0, '/', COOKIE_DOMAIN, true);
+if (PHP_MAJOR_VERSION > 7 || (PHP_MAJOR_VERSION == 7 && PHP_MINOR_VERSION >= 3)) {
+	// Set the SameSite cookie attribute if possible.
+	$options = array('expires': 0, 'path': '/', 'domain': COOKIE_DOMAIN, 'secure': true, 'httponly': true, 'samesite': 'Strict');
+	setcookie('token', $jwt, $options);
+} else {
+	setcookie('token', $jwt, 0, '/', COOKIE_DOMAIN, true, true);
+}
 echo 'OK';
 
 //$decoded = JWT::decode($jwt, $key, array(SIGNING_ALGORITHM));
